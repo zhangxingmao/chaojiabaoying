@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 interface SoundEffectsProps {
   onButtonClick?: () => void;
@@ -16,7 +16,7 @@ export default function SoundEffects({ onButtonClick, onSuccess, onError, onHove
     // Initialize audio context on user interaction
     const initAudio = () => {
       if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+        audioContextRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       }
     };
 
@@ -44,49 +44,49 @@ export default function SoundEffects({ onButtonClick, onSuccess, onError, onHove
     oscillator.stop(audioContextRef.current.currentTime + duration);
   };
 
-  const playButtonClick = () => {
+  const playButtonClick = useCallback(() => {
     playTone(800, 0.1, 'square', 0.05);
     setTimeout(() => playTone(1000, 0.1, 'square', 0.03), 50);
-  };
+  }, []);
 
-  const playSuccess = () => {
+  const playSuccess = useCallback(() => {
     playTone(523, 0.2, 'sine', 0.1); // C5
     setTimeout(() => playTone(659, 0.2, 'sine', 0.1), 100); // E5
     setTimeout(() => playTone(784, 0.3, 'sine', 0.1), 200); // G5
-  };
+  }, []);
 
-  const playError = () => {
+  const playError = useCallback(() => {
     playTone(300, 0.3, 'sawtooth', 0.1);
     setTimeout(() => playTone(250, 0.3, 'sawtooth', 0.1), 150);
-  };
+  }, []);
 
-  const playHover = () => {
+  const playHover = useCallback(() => {
     playTone(600, 0.05, 'sine', 0.02);
-  };
+  }, []);
 
   useEffect(() => {
     if (onButtonClick) {
       playButtonClick();
     }
-  }, [onButtonClick]);
+  }, [onButtonClick, playButtonClick]);
 
   useEffect(() => {
     if (onSuccess) {
       playSuccess();
     }
-  }, [onSuccess]);
+  }, [onSuccess, playSuccess]);
 
   useEffect(() => {
     if (onError) {
       playError();
     }
-  }, [onError]);
+  }, [onError, playError]);
 
   useEffect(() => {
     if (onHover) {
       playHover();
     }
-  }, [onHover]);
+  }, [onHover, playHover]);
 
   return null;
 } 

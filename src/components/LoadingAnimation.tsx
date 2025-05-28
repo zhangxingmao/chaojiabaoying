@@ -1,6 +1,6 @@
 'use client';
 
-import { Brain, Zap, Sparkles } from 'lucide-react';
+import { Brain, Sparkles } from 'lucide-react';
 
 interface LoadingAnimationProps {
   message?: string;

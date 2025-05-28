@@ -1,17 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Zap, MessageCircle, Sparkles, Copy, Check, Wand2, Brain, Heart, Smile, Lightbulb, Sword, Star, ArrowRight, Flame } from 'lucide-react';
+import { Zap, MessageCircle, Sparkles, Copy, Check, Wand2, Brain, Heart, Smile, Lightbulb, Sword, Star, ArrowRight, Flame, Crown, Zap as Lightning, Target } from 'lucide-react';
 import ParticleBackground from '@/components/ParticleBackground';
 import LoadingAnimation from '@/components/LoadingAnimation';
 
 const attackStyles = [
-  { value: 'sarcastic', label: '阴阳怪气型', description: '用讽刺和暗示来回击', emoji: '😏', icon: Smile, color: 'from-amber-500 to-orange-500' },
-  { value: 'logical', label: '逻辑碾压型', description: '用理性和逻辑来反驳', emoji: '🧠', icon: Brain, color: 'from-blue-500 to-indigo-500' },
-  { value: 'emotional', label: '情感爆发型', description: '用强烈的情感来表达', emoji: '🔥', icon: Heart, color: 'from-red-500 to-pink-500' },
-  { value: 'humorous', label: '幽默调侃型', description: '用幽默和调侃来化解', emoji: '😄', icon: Smile, color: 'from-green-500 to-emerald-500' },
-  { value: 'philosophical', label: '哲学思辨型', description: '用深度思考来回应', emoji: '🤔', icon: Lightbulb, color: 'from-purple-500 to-violet-500' },
-  { value: 'direct', label: '直接怼回型', description: '直接有力地回击', emoji: '💪', icon: Sword, color: 'from-gray-700 to-gray-900' }
+  { value: 'sarcastic', label: '阴阳怪气型', description: '用讽刺和暗示让对方感受到被鄙视的滋味', emoji: '😏', icon: Smile, color: 'from-amber-500 to-orange-500' },
+  { value: 'logical', label: '逻辑碾压型', description: '用严密逻辑让对方的观点显得愚蠢可笑', emoji: '🧠', icon: Brain, color: 'from-blue-500 to-indigo-500' },
+  { value: 'emotional', label: '情感爆发型', description: '用强烈情感让对方感受到你的愤慨', emoji: '🔥', icon: Heart, color: 'from-red-500 to-pink-500' },
+  { value: 'humorous', label: '幽默调侃型', description: '用幽默嘲笑让对方在笑声中感到尴尬', emoji: '😄', icon: Smile, color: 'from-green-500 to-emerald-500' },
+  { value: 'philosophical', label: '哲学思辨型', description: '用深度智慧让对方感到自己的浅薄无知', emoji: '🤔', icon: Lightbulb, color: 'from-purple-500 to-violet-500' },
+  { value: 'direct', label: '直接怼回型', description: '毫不留情地指出对方的错误', emoji: '💪', icon: Sword, color: 'from-gray-700 to-gray-900' },
+  { value: 'savage', label: '犀利毒舌型', description: '毫不留情的犀利回击，让对方哑口无言', emoji: '🗡️', icon: Lightning, color: 'from-red-600 to-rose-700' },
+  { value: 'witty', label: '机智巧妙型', description: '用聪明话术和巧妙比喻让对方自愧不如', emoji: '🎯', icon: Target, color: 'from-cyan-500 to-blue-600' },
+  { value: 'dominant', label: '强势压制型', description: '用气势压倒对方，显示你的优越感', emoji: '👑', icon: Crown, color: 'from-yellow-500 to-amber-600' }
 ];
 
 export default function Home() {
@@ -23,6 +26,7 @@ export default function Home() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
+  const [ultimateMode, setUltimateMode] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -50,6 +54,7 @@ export default function Home() {
           opponentText,
           intensity,
           attackStyle,
+          ultimateMode,
         }),
       });
 
@@ -86,12 +91,10 @@ export default function Home() {
 
   const getIntensityLabel = (value: number) => {
     if (value <= 3) return '温和';
-    if (value <= 6) return '适中';
+    if (value <= 6) return '中等';
     if (value <= 8) return '强烈';
     return '激烈';
   };
-
-  const selectedStyle = attackStyles.find(style => style.value === attackStyle);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
@@ -217,6 +220,44 @@ export default function Home() {
               </div>
             </div>
 
+            {/* 终极回击模式 */}
+            <div className="group relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-red-500 to-rose-600 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-300" />
+              <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-white/30 transition-all duration-300">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 bg-gradient-to-r from-red-500 to-rose-600 rounded-2xl flex items-center justify-center shadow-lg">
+                      <Lightning className="w-7 h-7 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-white">终极回击模式</h2>
+                      <p className="text-gray-300 text-sm">开启后生成更加犀利解气的回击</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setUltimateMode(!ultimateMode)}
+                    className={`relative w-16 h-8 rounded-full transition-all duration-300 ${
+                      ultimateMode 
+                        ? 'bg-gradient-to-r from-red-500 to-rose-600 shadow-lg shadow-red-500/50' 
+                        : 'bg-white/20'
+                    }`}
+                  >
+                    <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all duration-300 ${
+                      ultimateMode ? 'left-9' : 'left-1'
+                    }`} />
+                  </button>
+                </div>
+                {ultimateMode && (
+                  <div className="mt-4 p-4 bg-red-500/20 rounded-xl border border-red-500/30">
+                    <div className="flex items-center gap-2 text-red-300">
+                      <Flame className="w-4 h-4" />
+                      <span className="text-sm font-medium">终极模式已开启 - 准备释放最强火力！</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* 攻击风格 */}
             <div className="group relative">
               <div className="absolute -inset-1 bg-gradient-to-r from-purple-400 to-pink-500 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-300" />
@@ -228,7 +269,7 @@ export default function Home() {
                   <h2 className="text-3xl font-bold text-white">攻击风格</h2>
                 </div>
                 
-                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {attackStyles.map((style) => {
                     const IconComponent = style.icon;
                     const isSelected = attackStyle === style.value;
@@ -236,25 +277,25 @@ export default function Home() {
                       <button
                         key={style.value}
                         onClick={() => setAttackStyle(style.value)}
-                        className={`group/style relative p-6 rounded-2xl border-2 transition-all duration-300 text-left ${
+                        className={`group/style relative p-4 rounded-2xl border-2 transition-all duration-300 text-left ${
                           isSelected 
                             ? `border-white/40 bg-gradient-to-r ${style.color} shadow-xl transform scale-105` 
                             : 'border-white/20 bg-white/5 hover:border-white/30 hover:bg-white/10 hover:scale-102'
                         }`}
                       >
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                        <div className="flex items-center gap-2 mb-2">
+                          <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${
                             isSelected ? 'bg-white/20' : `bg-gradient-to-r ${style.color}`
                           }`}>
-                            <IconComponent className="w-5 h-5 text-white" />
+                            <IconComponent className="w-4 h-4 text-white" />
                           </div>
-                          <span className="text-2xl">{style.emoji}</span>
+                          <span className="text-xl">{style.emoji}</span>
                         </div>
-                        <h3 className="text-lg font-bold text-white mb-2">{style.label}</h3>
-                        <p className="text-sm text-gray-300">{style.description}</p>
+                        <h3 className="text-base font-bold text-white mb-1">{style.label}</h3>
+                        <p className="text-xs text-gray-300 leading-tight">{style.description}</p>
                         {isSelected && (
                           <div className="absolute top-2 right-2">
-                            <Check className="w-6 h-6 text-white" />
+                            <Check className="w-5 h-5 text-white" />
                           </div>
                         )}
                       </button>
@@ -266,20 +307,30 @@ export default function Home() {
 
             {/* 生成按钮 */}
             <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-3xl blur opacity-50 group-hover:opacity-75 transition duration-300" />
+              <div className={`absolute -inset-1 ${ultimateMode ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-700 animate-pulse' : 'bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600'} rounded-3xl blur opacity-50 group-hover:opacity-75 transition duration-300`} />
               <button
                 onClick={handleGenerate}
                 disabled={isLoading || !opponentText.trim() || !attackStyle}
-                className="relative w-full h-24 text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 hover:from-cyan-500 hover:via-blue-600 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white rounded-3xl shadow-2xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed overflow-hidden"
+                className={`relative w-full h-24 text-2xl font-bold ${ultimateMode ? 'bg-gradient-to-r from-red-500 via-rose-600 to-red-700 hover:from-red-600 hover:via-rose-700 hover:to-red-800' : 'bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 hover:from-cyan-500 hover:via-blue-600 hover:to-purple-700'} disabled:from-gray-600 disabled:to-gray-700 text-white rounded-3xl shadow-2xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed overflow-hidden`}
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 {isLoading ? (
-                  <LoadingAnimation message="AI正在为你生成完美回击..." />
+                  <LoadingAnimation message={ultimateMode ? "终极AI正在释放最强火力..." : "AI正在为你生成完美回击..."} />
                 ) : (
                   <div className="flex items-center justify-center gap-4">
-                    <Zap className="w-8 h-8" />
-                    <span>开始吵架</span>
-                    <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-200" />
+                    {ultimateMode ? (
+                      <>
+                        <Lightning className="w-8 h-8 animate-bounce" />
+                        <span>释放终极火力</span>
+                        <Flame className="w-6 h-6 animate-pulse" />
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="w-8 h-8" />
+                        <span>开始吵架</span>
+                        <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-200" />
+                      </>
+                    )}
                   </div>
                 )}
               </button>
@@ -290,27 +341,37 @@ export default function Home() {
           <div className="space-y-8">
             {responses.length > 0 ? (
               <div className="group relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-cyan-500 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-300" />
+                <div className={`absolute -inset-1 ${ultimateMode ? 'bg-gradient-to-r from-red-400 to-rose-500 animate-pulse' : 'bg-gradient-to-r from-emerald-400 to-cyan-500'} rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-300`} />
                 <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 hover:border-white/30 transition-all duration-300">
                   <div className="flex items-center gap-4 mb-8">
-                    <div className="w-14 h-14 bg-gradient-to-r from-emerald-400 to-cyan-500 rounded-2xl flex items-center justify-center shadow-lg">
-                      <Sparkles className="w-7 h-7 text-white" />
+                    <div className={`w-14 h-14 ${ultimateMode ? 'bg-gradient-to-r from-red-400 to-rose-500' : 'bg-gradient-to-r from-emerald-400 to-cyan-500'} rounded-2xl flex items-center justify-center shadow-lg`}>
+                      {ultimateMode ? (
+                        <Lightning className="w-7 h-7 text-white animate-pulse" />
+                      ) : (
+                        <Sparkles className="w-7 h-7 text-white" />
+                      )}
                     </div>
-                    <h2 className="text-3xl font-bold text-white">AI为你生成的回击</h2>
+                    <h2 className="text-3xl font-bold text-white">
+                      {ultimateMode ? '终极AI火力全开' : 'AI为你生成的回击'}
+                    </h2>
                   </div>
                   
                   <div className="space-y-6">
                     {responses.map((response, index) => (
                       <div
                         key={index}
-                        className="group/response relative p-6 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm rounded-2xl border border-white/20 hover:border-white/30 transition-all duration-300 hover:scale-102 hover:shadow-xl"
+                        className={`group/response relative p-6 ${ultimateMode ? 'bg-gradient-to-r from-red-500/20 to-rose-500/20 border-red-500/30' : 'bg-gradient-to-r from-white/10 to-white/5 border-white/20'} backdrop-blur-sm rounded-2xl border hover:border-white/30 transition-all duration-300 hover:scale-102 hover:shadow-xl`}
                         style={{ animationDelay: `${index * 0.1}s` }}
                       >
                         <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 bg-gradient-to-r from-cyan-400 to-purple-500 text-white rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 shadow-lg">
-                            {index + 1}
+                          <div className={`w-12 h-12 ${ultimateMode ? 'bg-gradient-to-r from-red-400 to-rose-500' : 'bg-gradient-to-r from-cyan-400 to-purple-500'} text-white rounded-full flex items-center justify-center text-lg font-bold flex-shrink-0 shadow-lg`}>
+                            {ultimateMode ? (
+                              <Flame className="w-6 h-6" />
+                            ) : (
+                              <span>{index + 1}</span>
+                            )}
                           </div>
-                          <p className="text-white leading-relaxed flex-1 text-xl font-medium">{response}</p>
+                          <p className={`${ultimateMode ? 'text-red-100' : 'text-white'} leading-relaxed flex-1 text-xl font-medium`}>{response}</p>
                           <button
                             onClick={() => copyToClipboard(response, index)}
                             className="opacity-0 group-hover/response:opacity-100 transition-all duration-200 p-3 hover:bg-white/10 rounded-xl transform hover:scale-110"
@@ -318,10 +379,15 @@ export default function Home() {
                             {copiedIndex === index ? (
                               <Check className="w-6 h-6 text-emerald-400" />
                             ) : (
-                              <Copy className="w-6 h-6 text-gray-300 hover:text-white" />
+                              <Copy className={`w-6 h-6 ${ultimateMode ? 'text-red-300 hover:text-red-100' : 'text-gray-300 hover:text-white'}`} />
                             )}
                           </button>
                         </div>
+                        {ultimateMode && (
+                          <div className="absolute top-2 right-2">
+                            <div className="w-3 h-3 bg-red-500 rounded-full animate-ping" />
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
